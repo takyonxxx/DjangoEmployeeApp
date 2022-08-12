@@ -1,5 +1,5 @@
 from django.urls import path
-from djangoemployeeapp.base_view import create_view_paths
+from DjangoEmployeeApp.base_view import create_view_paths
 from . import views
 import itertools
 

@@ -28,7 +28,7 @@
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
-        'employee' # we add our project here
+        'Employee' # we add our project here
     ]
     
     # we changed lang, timezone

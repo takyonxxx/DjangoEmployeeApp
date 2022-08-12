@@ -10,5 +10,5 @@ django-redis
 django-redis-cache
 django-mptt
 djangorestframework-recursive
-mirage
 requests
+mirage
