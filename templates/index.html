@@ -23,9 +23,18 @@
             <td>
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="nameInput">Employee Name</label>
-                    <input type="text" name="name" class="form-control" id="input_name"
-                           aria-describedby="nameHelp" placeholder="Enter Employee Name...">
+                    <label for="nameInput">Full Name</label>
+                    <input type="text" name="fullname" class="form-control" id="input_name"
+                           placeholder="Enter Employee Full Name...">
+                    <label for="emailInput">Email Address</label>
+                    <input type="text" name="email" class="form-control" id="input_email"
+                           placeholder="Enter Employee Email Address...">
+                    <label for="usernameInput">Username</label>
+                    <input type="text" name="username" class="form-control" id="input_username"
+                           placeholder="Enter Employee Username...">
+                    <label for="passwordInput">Password</label>
+                    <input type="text" name="password" class="form-control" id="input_password"
+                           placeholder="Enter Employee Password...">
                 </div>
                 <button type="button" class="btn btn-danger add">Add</button>
             </td>
@@ -41,6 +50,9 @@
             <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Username</th>
+                <th scope="col">Password</th>
                 <th scope="col">Status</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -51,7 +63,10 @@
                 <tr>
                     <th scope="row">{{ employee.id }}</th>
                     <td>{{ employee.name }}</td>
-                    {% if employee.status %}
+                    <td>{{ employee.email }}</td>
+                    <td>{{ employee.username }}</td>
+                    <td>{{ employee.password }}</td>
+                    {% if employee.is_active %}
                         <td>Working</td>
                     {% else %}
                         <td>Not Working</td>
@@ -82,7 +97,12 @@
         $.ajax({
             type: 'POST',
             url: 'createEmployee/',
-            data: {name: document.querySelector('#input_name').value},
+            data: {
+                name: document.querySelector('#input_name').value,
+                email: document.querySelector('#input_email').value,
+                username: document.querySelector('#input_username').value,
+                password: document.querySelector('#input_password').value
+            },
             success: function (data) {
                 location.reload();
             },

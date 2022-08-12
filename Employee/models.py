@@ -5,8 +5,8 @@ from django.utils import timezone
 
 # Create your models here.
 class Employee(models.Model):
-    name = models.CharField(max_length=50, verbose_name="Name")
-    email = models.EmailField(max_length=99, unique=True,blank=True)
+    name = models.CharField(max_length=50, verbose_name="Full Name")
+    email = models.EmailField(max_length=99, blank=True, verbose_name="Email")
     username = models.CharField(max_length=255, blank=True, default='')
     # password = fields.EncryptedCharField(blank=True, default='')
     password = models.CharField(max_length=99, blank=True, default='')

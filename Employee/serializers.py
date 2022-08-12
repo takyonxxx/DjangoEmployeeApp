@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
-from employee.models import Employee
+from Employee.models import Employee
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    desc = serializers.SerializerMethodField()
+    # desc = serializers.SerializerMethodField()
 
     class Meta:
         model = Employee
@@ -12,4 +12,4 @@ class EmployeeSerializer(serializers.ModelSerializer):
         # exclude = ('name',)
 
     def get_desc(self, obj):
-        return f'id : {obj.id}, name : {obj.name}, status : {obj.status}'
+        return f'id : {obj.id}, name : {obj.name}, is_active : {obj.is_active}'

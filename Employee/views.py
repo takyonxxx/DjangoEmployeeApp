@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from rest_framework.response import Response
 
-from djangoemployeeapp.base_view import BaseViewSet
+from DjangoEmployeeApp.base_view import BaseViewSet
 from .models import Employee
 # Create your views here.
 from .serializers import EmployeeSerializer
@@ -50,7 +50,14 @@ class EmployeeViewSet(BaseViewSet):
 
     def create(self, request, *args, **kwargs):
         _name = request.data.get('name') or ''
-        new_employee = Employee(name=_name, status=False)
+        _email = request.data.get('email') or ''
+        _username = request.data.get('username') or ''
+        _password = request.data.get('password') or ''
+        new_employee = Employee(name=_name,
+                                email=_email,
+                                username=_username,
+                                password=_password,
+                                is_active=False)
         new_employee.save()
 
         return redirect('/')
@@ -58,7 +65,7 @@ class EmployeeViewSet(BaseViewSet):
     def update(self, request, *args, **kwargs):
         _id = request.data.get('id') or ''
         employee = Employee.objects.filter(id=_id).first()
-        employee.status = not employee.status
+        employee.is_active = not employee.is_active
         employee.save()
         return redirect('/')
 

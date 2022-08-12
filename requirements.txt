@@ -1,5 +1,6 @@
-Django
 django_apscheduler
+Django
+requests
 djangorestframework_simplejwt
 django_filter
 djangorestframework
@@ -10,5 +11,4 @@ django-redis
 django-redis-cache
 django-mptt
 djangorestframework-recursive
-requests
-mirage
+# mirage
