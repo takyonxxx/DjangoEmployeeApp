@@ -12,8 +12,8 @@ class Employee(models.Model):
     password = models.CharField(max_length=99, blank=True, default='')
     is_active = models.BooleanField(default=False, verbose_name="Active")
     created = models.DateTimeField(default=timezone.now)
-    # REQUIRED_FIELDS = ['name']
-    # id_prefix = 'emp'
+    REQUIRED_FIELDS = ['name']
+    id_prefix = 'emp'
 
     def __str__(self):
         return self.name

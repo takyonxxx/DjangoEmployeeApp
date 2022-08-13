@@ -2,3 +2,5 @@
 *.xml
 *.pyc
 *.sqlite3
+*.iml
+*.iml
