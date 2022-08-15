@@ -152,7 +152,7 @@ class OracleCon(DBConnector):
         return self.is_connected
 
 
-# factory
+# factory, use this factory if all db settings are same
 class DbFactory:
 
     def __init__(self, _uri, _name, _username, _password, _port):
