@@ -10,7 +10,6 @@ class Employee(models.Model):
     email = models.EmailField(max_length=99, blank=True, verbose_name="Email")
     username = models.CharField(max_length=255, blank=True, default='')
     password = fields.EncryptedCharField(blank=True, default='')
-    # password = models.CharField(max_length=99, blank=True, default='')
     is_active = models.BooleanField(default=False, verbose_name="Active")
     created = models.DateTimeField(default=timezone.now)
     REQUIRED_FIELDS = ['name']
