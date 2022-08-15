@@ -2,12 +2,13 @@ from abc import abstractmethod, ABCMeta
 
 # singleton and abstract method
 import psycopg2
+import psycopg2.extras
 
 
 class DBConnector(metaclass=ABCMeta):
     _instance = None
 
-    def __new__(cls,  _uri, _name, _username, _password, _port):
+    def __new__(cls, _uri, _name, _username, _password, _port):
         if cls._instance is None:
             print('Creating db connector with parameters : {} {} {} {} {}'.format(
                 _uri, _name, _username, _password, _port
@@ -22,18 +23,22 @@ class DBConnector(metaclass=ABCMeta):
     def disconnect(self): pass
 
     @abstractmethod
+    def get_tables(self): pass
+
+    @abstractmethod
     def get_status(self): pass
 
 
 class PostgresSQLCon(DBConnector):
     def __init__(self, _uri, _name, _username, _password, _port):
         self.conn = None
+        self.schema = None
         self.uri = _uri
         self.name = _name
         self.username = _username
         self.password = _password
         self.port = _port
-        self.status = None
+        self.is_connected = False
 
     def connect(self):
         self.conn = psycopg2.connect(dbname=self.name,
@@ -42,81 +47,109 @@ class PostgresSQLCon(DBConnector):
                                      host=self.uri,
                                      port=self.port)
         if self.conn:
-            self.status = True
+            self.is_connected = True
             print("PostgreSQL connected.")
 
     def disconnect(self):
-        self.status = False
+        self.conn = None
+        self.is_connected = False
         print("PostgreSQL disconnected.")
 
+    def get_tables(self):
+        if self.is_connected:
+            cursor = self.conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+            # TODO: use Django postgresql ORM instead [Important!]
+            cursor.execute("""SELECT table_name
+                              FROM information_schema.tables
+                              WHERE table_schema != 'pg_catalog'
+                              AND table_schema != 'information_schema'
+                              AND table_type='BASE TABLE'
+                              ORDER BY table_name""")
+            tables = cursor.fetchall()
+            cursor.close()
+            return tables
+        return None
+
     def get_status(self):
-        return self.status
+        return self.is_connected
 
 
 class MySQLCon(DBConnector):
     def __init__(self, _uri, _name, _username, _password, _port):
         self.conn = None
+        self.schema = None
         self.uri = _uri
         self.name = _name
         self.username = _username
         self.password = _password
         self.port = _port
-        self.status = None
+        self.is_connected = False
 
     def connect(self):
-        self.status = True
+        self.is_connected = True
         print("MySQL connected.")
 
     def disconnect(self):
-        self.status = False
+        self.is_connected = False
         print("MySQL disconnected.")
 
+    def get_tables(self):
+        return self.schema
+
     def get_status(self):
-        return self.status
+        return self.is_connected
 
 
 class SQLServerCon(DBConnector):
     def __init__(self, _uri, _name, _username, _password, _port):
         self.conn = None
+        self.schema = None
         self.uri = _uri
         self.name = _name
         self.username = _username
         self.password = _password
         self.port = _port
-        self.status = None
+        self.is_connected = False
 
     def connect(self):
-        self.status = True
+        self.is_connected = True
         print("SQLServerCon connected.")
 
     def disconnect(self):
-        self.status = False
+        self.is_connected = False
         print("SQLServerCon disconnected.")
 
+    def get_tables(self):
+        return self.schema
+
     def get_status(self):
-        return self.status
+        return self.is_connected
 
 
 class OracleCon(DBConnector):
     def __init__(self, _uri, _name, _username, _password, _port):
         self.conn = None
+        self.schema = None
         self.uri = _uri
         self.name = _name
         self.username = _username
         self.password = _password
         self.port = _port
-        self.status = None
+        self.is_connected = False
 
     def connect(self):
-        self.status = True
+        self.is_connected = True
         print("OracleCon connected.")
 
     def disconnect(self):
-        self.status = False
+        self.is_connected = False
         print("OracleCon disconnected.")
 
+    def get_tables(self):
+        return self.schema
+
     def get_status(self):
-        return self.status
+        return self.is_connected
 
 
 # factory
@@ -156,6 +189,7 @@ if __name__ == "__main__":  # pragma: no cover
 
     psql_db = db_factory.get_connector('psql')
     psql_db.connect()
+    print(psql_db.get_tables())
 
-    oracle_db = db_factory.get_connector('oracle')
-    oracle_db.connect()
+    # oracle_db = db_factory.get_connector('oracle')
+    # oracle_db.connect()
