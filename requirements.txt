@@ -12,3 +12,4 @@ django-redis-cache
 django-mptt
 djangorestframework-recursive
 mirage
+pyodbc
